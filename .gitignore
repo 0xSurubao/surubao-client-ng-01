@@ -40,3 +40,34 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+
+### FROM CURRENT PROJECT ONLY! ###
+
+# app settings, versioning, CDN name and other settings
+.app.config.json
+
+# enviroment configs
+src/env/app-enviroment-config-local.ts
+app-enviroment-config-local.ts
+app-enviroment-config-production.ts
+text-replacing-list.json
+
+# build folder
+.build/*
+# build folders examples
+!/.build/EXAMPLE-website-01/
+!/.build/EXAMPLE-website-01/**
+!/.build/EXAMPLE-website-02/
+!/.build/EXAMPLE-website-02/**
+
+# local fake CDN
+.local-fake-cdn/*
+!.local-fake-cdn/.keep
+
+# Firebase Hosting
+.firebase
+
+# auto generateds
+src/index.js
+src/tailwind-output.css

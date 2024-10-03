@@ -1,0 +1,9 @@
+{
+    "workbench.colorCustomizations": {
+        "titleBar.activeBackground": "#252535",
+        "titleBar.inactiveBackground": "#252535",
+        "activityBar.background": "#252545"
+    },
+    "editor.tabSize": 4,
+    "liveServer.settings.port": 5501
+}

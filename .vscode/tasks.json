@@ -1,42 +1,36 @@
 {
-  // For more information, visit: https://go.microsoft.com/fwlink/?LinkId=733558
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "type": "npm",
-      "script": "start",
-      "isBackground": true,
-      "problemMatcher": {
-        "owner": "typescript",
-        "pattern": "$tsc",
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": {
-            "regexp": "(.*?)"
-          },
-          "endsPattern": {
-            "regexp": "bundle generation complete"
-          }
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "npm: serve-local",
+            "type": "npm",
+            "script": "serve-local",
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": {
+                    "regexp": ".*",
+                    "file": 1,
+                    "location": 2,
+                    "message": 3
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".*Five Server running at:.*",
+                    "endsPattern": ".*Application bundle generation complete.*"
+                }
+            }
+        },
+        {
+            "label": "terminate-serve-local", // Tarefa para encerrar o processo ao final
+            "type": "shell",
+            "command": "taskkill",
+            "args": [
+                "/F",
+                "/IM",
+                "node.exe"
+            ], // Matar o processo do Node.js, que está rodando o servidor Angular e CDN
+            "problemMatcher": []
         }
-      }
-    },
-    {
-      "type": "npm",
-      "script": "test",
-      "isBackground": true,
-      "problemMatcher": {
-        "owner": "typescript",
-        "pattern": "$tsc",
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": {
-            "regexp": "(.*?)"
-          },
-          "endsPattern": {
-            "regexp": "bundle generation complete"
-          }
-        }
-      }
-    }
-  ]
+    ]
 }
