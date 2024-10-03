@@ -11,6 +11,7 @@
         "bracketpaircolordlw.bracket-pair-color-dlw",
         "oderwat.indent-rainbow",
         "aaron-bond.better-comments",
-        "pkief.material-icon-theme"
+        "pkief.material-icon-theme",
+        "editorconfig.editorconfig"
     ]
 }

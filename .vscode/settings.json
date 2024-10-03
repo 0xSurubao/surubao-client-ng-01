@@ -5,5 +5,6 @@
         "activityBar.background": "#252545"
     },
     "editor.tabSize": 4,
+    "javascript.format.enable": true,
     "liveServer.settings.port": 5501
 }
