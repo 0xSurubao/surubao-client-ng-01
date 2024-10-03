@@ -155,6 +155,47 @@ def build_angular_project(environment_name: str, out_put_foulder_name: str):
     )
 
     subprocess.run(terminal_command, shell=True)
+    
+def handle_text_replacing(file_path: str):
+    app_config = try_to_load_app_config_file()
+    
+    for rel in app_config.TextReplacingList:
+        text_file_content_replacing(
+            file_path,
+            rel.OriginalText,
+            rel.ReplaceText,
+        )
+
+def handle_replacing_in_folder(folder_path: str, ignored_extensions):
+    # interates over all files in folder path
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
+            orginal_file_path = os.path.join(root, file)
+
+            # verify if file has ignored extension
+            if not any(
+                orginal_file_path.endswith(ext) for ext in ignored_extensions
+            ):
+                handle_text_replacing(orginal_file_path)
+
+def deploy_firebase_rules(website_name: str):
+    print("> Uploading to Firestore rules...")
+    terminal_command = "firebase deploy --only firestore:rules"
+    subprocess.run(terminal_command, shell=True)
+
+def deploy_firebase_hosting(website_name: str):
+    print("> Handling text replacing...")
+    build_firebase_folder = "./.build/" + website_name
+    root_build_folder = build_firebase_folder + "/build"
+    build_browser_folder = root_build_folder + "/browser"
+
+    extensoes_excluidas = [".ts", "tailwind.css"]
+    handle_replacing_in_folder(build_browser_folder, extensoes_excluidas)
+
+    print("> Uploading to Firebase hosting...")
+    terminal_command = "firebase deploy --only hosting:" + website_name
+    build_firebase_folder = "./.build/" + website_name
+    subprocess.run(terminal_command, shell=True, cwd=build_firebase_folder)
 
 # region Main
 def handle_deploy_try():
@@ -163,32 +204,78 @@ def handle_deploy_try():
     # !!! DEBUG ONLY!
     # !!! DEBUG ONLY!
     # !!! DEBUG ONLY!
-    # safety_check_success = handle_safety_check(environment_name)
+    safety_check_success = handle_safety_check(environment_name)
     
-    # if (safety_check_success is False):
-    #     print(
-    #         "\n" + "\n" +
-    #         _red_text_tag +
-    #         "Confimation FAILED!!!. Aborting deployment! (" +
-    #         environment_name +
-    #         ")" +
-    #         _reset_color_text_tag +
-    #         "\n" +
-    #         ""
-    #     )
-    #     return
+    if (safety_check_success is False):
+        print(
+            "\n" + "\n" +
+            _red_text_tag +
+            "Confimation FAILED!!!. Aborting deployment! (" +
+            environment_name +
+            ")" +
+            _reset_color_text_tag +
+            "\n" +
+            ""
+        )
+        return
     # !!! DEBUG ONLY!
     # !!! DEBUG ONLY!
     # !!! DEBUG ONLY!
-    
+
+    print(
+        "\n\n" +
+        _green_text_tag +
+        '################ ' +
+        'Starting deployment... (' +
+        environment_name + ')' +
+        ' ################' +
+        _reset_color_text_tag +
+        '\n\n' +
+        '')
+
     increment_app_version()
     app_config = try_to_load_app_config_file()
+    website_name = app_config.HostingNamesByEnviroment[environment_name]
 
     apply_real_version_on_relative_env_file(environment_name, app_config.AppVersion)
-    build_angular_project(environment_name, app_config.HostingNamesByEnviroment[environment_name])
-
-
-
+    build_angular_project(environment_name, website_name)
+    # deploy_firebase_rules(website_name)
+    deploy_firebase_hosting(website_name)
 
     reset_fake_version_on_relative_env_file(environment_name, app_config.AppVersion)
+    
+    user_input = input(
+            _yellow_text_tag +
+            'Want to update the S3 CDN (with "local-cdn" folder)?' +
+            _reset_color_text_tag +
+            ' [y/N] > '  +
+            '')
+    
+    has_to_update_cdn = (user_input.lower() == "y".lower())
+    
+    if (has_to_update_cdn):
+        cdn_name = app_config.CdnS3BucketName
+        terminal_command = (
+            "aws s3 sync ./local-cdn s3://"
+            + cdn_name
+            + " --delete --cache-control max-age=31536000"
+        )
+
+        print("> Updating S3 CDN...")
+        subprocess.run(terminal_command, shell=True)
+
+    print(
+        "\n\n" +
+        _green_text_tag +
+        '################ ' +
+        'Deployment process finished :) (' +
+        environment_name +
+        '/' +
+        app_config.AppVersion + ')' +
+        ' ################' +
+        _reset_color_text_tag +
+        '\n\n' +
+        '')
+
+
 # endregion Main
