@@ -41,17 +41,18 @@
             <div class="
                 flex flex-col
                 bg-pink-500/0
+                text-xl
                 ">
                 <span>
                     TailwindCSS is
                 </span>
                 <br>
                 <span style="background-color: black;" class="font-bold text-green-500">
-                    Working!
+                    working, if you can read this!
                 </span>
                 <br>
                 <span class="text-slate-400">
-                    Not working :(
+                    not working, if you can read this :(
                 </span>
             </div>
 
@@ -100,27 +101,17 @@
             bg-pink-500
             h-full w-full
             ">
+            <app-base-scene class="
+                h-full w-full
+                "></app-base-scene>
         </div>
 
     </div>
 
 </div>
 
-<div class="
-    absolute
-    bottom-1
-    right-2
-    flex flex-col
-    justify-center
-    text-center
-    ">
+<app-version-panel></app-version-panel>
 
-    <span class="text-red-300">
-        {{ 'dev' }}
-    </span>
-
-    <span class="opacity-35">
-        v{{ _environmentData.APP_VERSION }}
-    </span>
-
-</div>
+<!-- <app-base-scene class="
+                h-full w-full
+                "></app-base-scene> -->

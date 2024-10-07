@@ -39,13 +39,13 @@ def get_deploy_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('enviroment_name', type=str)
     args = parser.parse_args()
-    
+
     return args
 
 def get_deploy_env_name():
     deploy_args = get_deploy_args()
     environment_name: str = deploy_args.enviroment_name
-    
+
     return environment_name
 
 def handle_safety_check(environment_name: str) -> bool:
@@ -94,6 +94,9 @@ def text_file_content_replacing(file_path, old_text, new_text):
 # region Controller - Config
 def try_to_load_app_config_file():
     global _app_config_file_path
+
+    print("_app_config_file_path = " + _app_config_file_path)
+
     app_config: Optional[AppConfig] = None
 
     try:
@@ -112,6 +115,8 @@ def try_to_load_app_config_file():
     return app_config
 
 def try_to_save_app_config_file(app_config: AppConfig):
+    print("_app_config_file_path = " + _app_config_file_path)
+
     with open(_app_config_file_path, "w") as json_file:
         json.dump(app_config, json_file, indent=4, default=vars)
 
@@ -124,23 +129,23 @@ def increment_app_version():
 def increment_version(base_version: str):
     version_parts = base_version.split(".")
     version_parts[-1] = str(int(version_parts[-1]) + 1)
-    
+
     new_version = ".".join(version_parts)
     return new_version
 # endregion Controller - Config
-        
+
 # region Controller - Version
 def apply_real_version_on_relative_env_file(environment_name: str, current_app_version):
     print("> Applying project version on relative enviroment...")
     env_file_path = "src/environments/environment." + environment_name + ".ts"
-    
-    text_file_content_replacing(env_file_path, current_app_version, _app_config_fake_version_pattern)
+
+    text_file_content_replacing(env_file_path, _app_config_fake_version_pattern, current_app_version)
 
 def reset_fake_version_on_relative_env_file(environment_name: str, current_app_version):
-    print("> Applying project version on relative enviroment...")
+    print("> Reseting project version on relative enviroment...")
     env_file_path = "src/environments/environment." + environment_name + ".ts"
-    
-    text_file_content_replacing(env_file_path,_app_config_fake_version_pattern,  current_app_version)
+
+    text_file_content_replacing(env_file_path, current_app_version, _app_config_fake_version_pattern)
 # endregion Controller - Version
 
 def build_angular_project(environment_name: str, out_put_foulder_name: str):
@@ -155,10 +160,10 @@ def build_angular_project(environment_name: str, out_put_foulder_name: str):
     )
 
     subprocess.run(terminal_command, shell=True)
-    
+
 def handle_text_replacing(file_path: str):
     app_config = try_to_load_app_config_file()
-    
+
     for rel in app_config.TextReplacingList:
         text_file_content_replacing(
             file_path,
@@ -205,7 +210,7 @@ def handle_deploy_try():
     # !!! DEBUG ONLY!
     # !!! DEBUG ONLY!
     safety_check_success = handle_safety_check(environment_name)
-    
+
     if (safety_check_success is False):
         print(
             "\n" + "\n" +
@@ -243,16 +248,16 @@ def handle_deploy_try():
     deploy_firebase_hosting(website_name)
 
     reset_fake_version_on_relative_env_file(environment_name, app_config.AppVersion)
-    
+
     user_input = input(
             _yellow_text_tag +
             'Want to update the S3 CDN (with "local-cdn" folder)?' +
             _reset_color_text_tag +
             ' [y/N] > '  +
             '')
-    
+
     has_to_update_cdn = (user_input.lower() == "y".lower())
-    
+
     if (has_to_update_cdn):
         cdn_name = app_config.CdnS3BucketName
         terminal_command = (

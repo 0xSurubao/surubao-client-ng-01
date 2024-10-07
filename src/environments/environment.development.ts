@@ -9,9 +9,9 @@ export const LocalEnvironmentName = 'local';
 export const environment: EnviromentData = {
     API_URL: 'https://NAME-NAME-NAME.onrender.com',
     CDN_URL: 'https://NAME-NAME-NAME.s3.sa-east-1.amazonaws.com',
-    APP_VERSION: "0.1.10",
+    APP_VERSION: "M.M.P",
 
-    ENVIRONMENT_NAME: ProductionEnvironmentName,
+    ENVIRONMENT_NAME: DevelopmentEnvironmentName,
     VAPID_PUBLIC_KEY: "*****************************************",
 };
 
