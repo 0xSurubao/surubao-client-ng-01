@@ -13,10 +13,14 @@ class TextReplaceRelation:
         self.OriginalText = OriginalText
         self.ReplaceText = ReplaceText
 
-class AppConfig:
-    def __init__(self, AppVersion: str, HostingNamesByEnviroment, CdnS3BucketName: str, TextReplacingList: list):
+class AppConfigCache:
+    def __init__(self, AppVersion: str, AppConfigByEnviroment):
         self.AppVersion = AppVersion
-        self.HostingNamesByEnviroment = HostingNamesByEnviroment
+        self.AppConfigByEnviroment = AppConfigByEnviroment
+
+class EnvConfig:
+    def __init__(self, HostingName: str, CdnS3BucketName: str, TextReplacingList: list):
+        self.HostingName = HostingName
         self.CdnS3BucketName = CdnS3BucketName
         self.TextReplacingList = [TextReplaceRelation(**item) for item in TextReplacingList]
 
@@ -102,12 +106,12 @@ def try_to_load_app_config_file():
 
     # print("_app_config_file_path = " + _app_config_file_path)
 
-    app_config: Optional[AppConfig] = None
+    app_config_cache: Optional[AppConfigCache] = None
 
     try:
         with open(_app_config_file_path, "r") as json_file:
             config_data = json.load(json_file)
-            app_config = AppConfig(**config_data)
+            app_config_cache = AppConfigCache(**config_data)
 
     except json.decoder.JSONDecodeError as exception:
         print(f"$$$ > ERROR trying to open \".app.config.json\" file! exception = {exception}")
@@ -117,19 +121,19 @@ def try_to_load_app_config_file():
         print("$$$ > \".app.config.json\" file not found!")
         exit()
 
-    return app_config
+    return app_config_cache
 
-def try_to_save_app_config_file(app_config: AppConfig):
+def try_to_save_app_config_file(app_config_cache: AppConfigCache):
     print("_app_config_file_path = " + _app_config_file_path)
 
     with open(_app_config_file_path, "w") as json_file:
-        json.dump(app_config, json_file, indent=4, default=vars)
+        json.dump(app_config_cache, json_file, indent=4, default=vars)
 
 def increment_app_version():
     print("> Incrementing project version...")
-    app_config = try_to_load_app_config_file()
-    app_config.AppVersion = increment_version(app_config.AppVersion)
-    try_to_save_app_config_file(app_config)
+    app_config_cache = try_to_load_app_config_file()
+    app_config_cache.AppVersion = increment_version(app_config_cache.AppVersion)
+    try_to_save_app_config_file(app_config_cache)
 
 def increment_version(base_version: str):
     version_parts = base_version.split(".")
@@ -166,8 +170,9 @@ def build_angular_project(environment_name: str, out_put_foulder_name: str):
 
     subprocess.run(terminal_command, shell=True)
 
-def handle_text_replacing(file_path: str):
-    app_config = try_to_load_app_config_file()
+def handle_text_replacing(file_path: str, environment_name: str):
+    app_config_cache = try_to_load_app_config_file()
+    app_config = app_config_cache.AppConfigByEnviroment[environment_name]
 
     for rel in app_config.TextReplacingList:
         text_file_content_replacing(
@@ -176,7 +181,7 @@ def handle_text_replacing(file_path: str):
             rel.ReplaceText,
         )
 
-def handle_replacing_in_folder(folder_path: str, ignored_extensions):
+def handle_replacing_in_folder(folder_path: str, environment_name: str, ignored_extensions):
     # interates over all files in folder path
     for root, dirs, files in os.walk(folder_path):
         for file in files:
@@ -186,21 +191,21 @@ def handle_replacing_in_folder(folder_path: str, ignored_extensions):
             if not any(
                 orginal_file_path.endswith(ext) for ext in ignored_extensions
             ):
-                handle_text_replacing(orginal_file_path)
+                handle_text_replacing(orginal_file_path, environment_name)
 
 def deploy_firebase_rules(website_name: str):
     print("> Uploading to Firestore rules...")
     terminal_command = "firebase deploy --only firestore:rules"
     subprocess.run(terminal_command, shell=True)
 
-def deploy_firebase_hosting(website_name: str):
+def deploy_firebase_hosting(website_name: str, environment_name: str):
     print("> Handling text replacing...")
     build_firebase_folder = "./.build/" + website_name
     root_build_folder = build_firebase_folder + "/build"
     build_browser_folder = root_build_folder + "/browser"
 
     extensoes_excluidas = [".ts", "tailwind.css"]
-    handle_replacing_in_folder(build_browser_folder, extensoes_excluidas)
+    handle_replacing_in_folder(build_browser_folder, environment_name, extensoes_excluidas)
 
     print("> Uploading to Firebase hosting...")
     terminal_command = "firebase deploy --only hosting:" + website_name
@@ -244,15 +249,16 @@ def handle_deploy_try():
         '')
 
     increment_app_version()
-    app_config = try_to_load_app_config_file()
-    website_name = app_config.HostingNamesByEnviroment[environment_name]
+    app_config_cache = try_to_load_app_config_file()
+    app_config = app_config_cache.AppConfigByEnviroment[environment_name]
+    website_name = app_config.HostingName
 
-    apply_real_version_on_relative_env_file(environment_name, app_config.AppVersion)
+    apply_real_version_on_relative_env_file(environment_name, app_config_cache.AppVersion)
     build_angular_project(environment_name, website_name)
     # deploy_firebase_rules(website_name)
-    deploy_firebase_hosting(website_name)
+    deploy_firebase_hosting(website_name, environment_name)
 
-    reset_fake_version_on_relative_env_file(environment_name, app_config.AppVersion)
+    reset_fake_version_on_relative_env_file(environment_name, app_config_cache.AppVersion)
 
     user_input = input(
             _yellow_text_tag +
@@ -298,7 +304,7 @@ def handle_deploy_try():
         'Deployment process finished :) (' +
         environment_name +
         '/' +
-        app_config.AppVersion + ')' +
+        app_config_cache.AppVersion + ')' +
         ' ################' +
         _reset_color_text_tag +
         '\n\n' +
