@@ -274,6 +274,23 @@ def handle_deploy_try():
         print("> Updating S3 CDN...")
         subprocess.run(terminal_command, shell=True)
 
+        maxAgeInSeconds = 86400
+
+        terminal_command = (
+            "aws s3 cp " +
+            "s3://" + cdn_name + " " +
+            "s3://" + cdn_name + " " +
+            "--recursive --metadata-directive REPLACE " +
+            "--expires 2034-01-01T00:00:00Z --acl public-read " +
+            "--cache-control max-age=" + str(maxAgeInSeconds) + ",public"
+        )
+
+        maxAgeInHours = maxAgeInSeconds / 60 / 60
+        maxAgeInDays = maxAgeInHours / 24
+
+        print("> Updating S3 chache control... ( max-age = " + str(maxAgeInSeconds) + "s / " +  str(maxAgeInHours) + "h / " + str(maxAgeInDays) + "d)")
+        subprocess.run(terminal_command, shell=True)
+
     print(
         "\n\n" +
         _green_text_tag +
