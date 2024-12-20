@@ -67,7 +67,12 @@ def handle_safety_check(environment_name: str) -> bool:
 # region Controller - Files
 def is_text_file(file_path: str):
     tipo_mime, _ = mimetypes.guess_type(file_path)
-    return tipo_mime and tipo_mime.startswith("text")
+    result = tipo_mime and (tipo_mime.startswith("text") or tipo_mime.startswith("application/javascript"))
+
+    if not result:
+        print(f'$$$ > tipo_mime = "{tipo_mime}"')
+
+    return result
 
 def text_file_content_replacing(file_path, old_text, new_text):
     if not is_text_file(file_path):
@@ -95,7 +100,7 @@ def text_file_content_replacing(file_path, old_text, new_text):
 def try_to_load_app_config_file():
     global _app_config_file_path
 
-    print("_app_config_file_path = " + _app_config_file_path)
+    # print("_app_config_file_path = " + _app_config_file_path)
 
     app_config: Optional[AppConfig] = None
 
