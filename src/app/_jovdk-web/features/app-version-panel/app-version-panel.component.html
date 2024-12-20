@@ -1,17 +1,19 @@
 <div class="
     absolute
+    pointer-events-none select-none
     bottom-1
     right-2
     flex flex-col
     justify-center
     text-center
+    overflow-hidden
     ">
 
-    <span class="text-red-300">
+    <span class="text-red-400 opacity-60 text-shadow" *ngIf="!_isProd">
         {{ _environmentData.ENVIRONMENT_NAME }}
     </span>
 
-    <span class="opacity-35">
+    <span class="text-white opacity-35 text-shadow">
         v{{ _environmentData.APP_VERSION }}
     </span>
 
