@@ -261,7 +261,7 @@ def handle_deploy_try():
     if (has_to_update_cdn):
         cdn_name = app_config.CdnS3BucketName
         terminal_command = (
-            "aws s3 sync ./local-cdn s3://"
+            "aws s3 sync ./.local-fake-cdn s3://"
             + cdn_name
             + " --delete --cache-control max-age=31536000"
         )

@@ -1,1 +1,1 @@
-python _DEPLOYER.py "production"
+python _deployer/deployer.py "production"
