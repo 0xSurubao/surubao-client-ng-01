@@ -31,7 +31,7 @@
                         ],
                         "scripts": [],
                         "server": "src/main.server.ts",
-                        "prerender": true,
+                        "prerender": false,
                         "ssr": {
                             "entry": "server.ts"
                         }
@@ -68,7 +68,9 @@
                                     "replace": "src/environments/environment.ts",
                                     "with": "src/environments/environment.development.ts"
                                 }
-                            ]
+                            ],
+                            "ssr": false,
+                            "prerender": false
                         },
                         "local": {
                             "optimization": false,
@@ -79,7 +81,9 @@
                                     "replace": "src/environments/environment.ts",
                                     "with": "src/environments/environment.local.ts"
                                 }
-                            ]
+                            ],
+                            "ssr": false,
+                            "prerender": false
                         }
                     },
                     "defaultConfiguration": "production"
