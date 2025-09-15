@@ -8,12 +8,11 @@ export const DevelopmentEnvironmentName = 'dev';
 export const LocalEnvironmentName = 'local';
 
 export const environment: EnviromentData = {
-    API_URL: 'http://localhost:2829',
-    CDN_URL: 'http://localhost:2828',
-    APP_VERSION: "0.0.0",
+    API_URL: 'https://surubao-prod-beta-01.onrender.com',
+    CDN_URL: 'https://surubao-prod-beta-01.s3.sa-east-1.amazonaws.com',
+    APP_VERSION: "M.M.P",
 
-    // ENVIRONMENT_NAME: DevelopmentEnvironmentName,
-    ENVIRONMENT_NAME: ProductionEnvironmentName,
+    ENVIRONMENT_NAME: ProductionBetaEnvironmentName,
     VAPID_PUBLIC_KEY: "*****************************************",
 };
 

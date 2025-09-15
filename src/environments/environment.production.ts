@@ -3,12 +3,13 @@ import { FirebaseOptions } from "@angular/fire/app";
 
 
 export const ProductionEnvironmentName = 'prod';
+export const ProductionBetaEnvironmentName = 'prod-beta';
 export const DevelopmentEnvironmentName = 'dev';
 export const LocalEnvironmentName = 'local';
 
 export const environment: EnviromentData = {
-    API_URL: 'https://BASE-ANGULAR-PROJECT-01-prod.onrender.com',
-    CDN_URL: 'https://BASE-ANGULAR-PROJECT-01-prod.s3.sa-east-1.amazonaws.com',
+    API_URL: 'https://surubao-prod-01.onrender.com',
+    CDN_URL: 'https://surubao-prod-01.s3.sa-east-1.amazonaws.com',
     APP_VERSION: "M.M.P",
 
     ENVIRONMENT_NAME: ProductionEnvironmentName,
@@ -26,7 +27,7 @@ export interface EnviromentData {
 }
 
 export const firebaseEnvironment: FirebaseOptions = {
-    "projectId": "INSERT-PROJECT-ID",
+    "projectId": "surubao-01",
     "appId": "INSERT-APP-ID",
     "storageBucket": "INSERT-STORAGE-BUCKET",
     "apiKey": "INSERT-API-KEY",

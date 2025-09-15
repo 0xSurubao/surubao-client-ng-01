@@ -60,13 +60,13 @@ export class ThreeJsBaseSceneComponent
     constructor()
     {
         this.OnLoadFinishCallback = () => this.OnLoadFinish();
-        this.LoadSfx();
+        // this.LoadSfx();
     }
 
     OnLoadFinish = () =>
     {
         this.InstantiateLights();
-        this.LoadCoin();
+        // this.LoadCoin();
     }
 
     InstantiateLights()
@@ -745,27 +745,27 @@ export class ThreeJsBaseSceneComponent
 
 
 
-    LoadSfx = () =>
-    {
-        let musicThemeUrl = environment.CDN_URL + '/public/_app/features/home/coin-sfx-01.mp3';
-        const audioLoader = new THREE.AudioLoader();
-        this._audioListener = new THREE.AudioListener();
+    // LoadSfx = () =>
+    // {
+    //     let musicThemeUrl = environment.CDN_URL + '/public/_app/features/home/coin-sfx-01.mp3';
+    //     const audioLoader = new THREE.AudioLoader();
+    //     this._audioListener = new THREE.AudioListener();
 
-        audioLoader.load(
-            musicThemeUrl,
-            (buffer) =>
-            {
-                this._coinSfxBuffer = buffer;
-            },
-            // onProgress callback
-            undefined,
-            // onError callback
-            (error) =>
-            {
-                console.error('################ ERROR trying to TryToPlayMusicThemeOnFirstInteraction');
-                console.error(error);
-            });
-    }
+    //     audioLoader.load(
+    //         musicThemeUrl,
+    //         (buffer) =>
+    //         {
+    //             this._coinSfxBuffer = buffer;
+    //         },
+    //         // onProgress callback
+    //         undefined,
+    //         // onError callback
+    //         (error) =>
+    //         {
+    //             console.error('################ ERROR trying to TryToPlayMusicThemeOnFirstInteraction');
+    //             console.error(error);
+    //         });
+    // }
 
     PlayCoinSfx = () =>
     {

@@ -3,6 +3,7 @@ import { FirebaseOptions } from "@angular/fire/app";
 
 
 export const ProductionEnvironmentName = 'prod';
+export const ProductionBetaEnvironmentName = 'prod-beta';
 export const DevelopmentEnvironmentName = 'dev';
 export const LocalEnvironmentName = 'local';
 
@@ -27,7 +28,7 @@ export interface EnviromentData {
 }
 
 export const firebaseEnvironment: FirebaseOptions = {
-    "projectId": "INSERT-PROJECT-ID",
+    "projectId": "surubao-01",
     "appId": "INSERT-APP-ID",
     "storageBucket": "INSERT-STORAGE-BUCKET",
     "apiKey": "INSERT-API-KEY",
