@@ -18,12 +18,17 @@ export class LocalizationService
             {
                 Id: 'pt-br',
                 Name: 'Português',
-                FlagIconName: 'brazil-flag-icon-01',
+                FlagIconName: 'brazil-flag-icon-01.svg',
             },
             {
                 Id: 'en-us',
                 Name: 'English (US)',
-                FlagIconName: 'usa-flag-icon-01',
+                FlagIconName: 'usa-flag-icon-01.svg',
+            },
+            {
+                Id: 'es',
+                Name: 'Español',
+                FlagIconName: 'spain-flag-icon-01.jpeg',
             },
         ];
 
@@ -34,6 +39,15 @@ export class LocalizationService
             {
                 'pt-br': 'Em breve...',
                 'en-us': 'Soon...',
+            }
+        },
+        {
+            TermKey: 'localization-language-id',
+            TermValueByLanguage:
+            {
+                'pt-br': 'pt-br',
+                'en-us': 'en-us',
+                'es': 'es',
             }
         },
         {

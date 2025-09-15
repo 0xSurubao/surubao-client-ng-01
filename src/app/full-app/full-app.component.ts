@@ -28,10 +28,10 @@ import { LocalizationService } from '../_jovdk-web/features/localization-service
     selector: 'full-app',
     standalone: true,
     imports: [
-        NgIf,
-        NgFor,
+        // NgIf,
+        // NgFor,
         AppVersionPanelComponent,
-        ThreeJsBaseSceneComponent,
+        // ThreeJsBaseSceneComponent,
         NavBarComponent,
         ImgLoadingDirective,
     ],
