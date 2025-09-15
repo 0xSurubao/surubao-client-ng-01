@@ -13,17 +13,16 @@ class TextReplaceRelation:
         self.OriginalText = OriginalText
         self.ReplaceText = ReplaceText
 
-class AppConfigCache:
-    def __init__(self, AppVersion: str, AppConfigByEnviroment):
-        self.AppVersion = AppVersion
-        self.AppConfigByEnviroment = AppConfigByEnviroment
-
 class EnvConfig:
     def __init__(self, HostingName: str, CdnS3BucketName: str, TextReplacingList: list):
         self.HostingName = HostingName
         self.CdnS3BucketName = CdnS3BucketName
         self.TextReplacingList = [TextReplaceRelation(**item) for item in TextReplacingList]
 
+class AppConfigCache:
+    def __init__(self, AppVersion: str, AppConfigByEnviroment):
+        self.AppVersion = AppVersion
+        self.AppConfigByEnviroment = AppConfigByEnviroment
 
 # region Config
 # texts colors
@@ -73,8 +72,8 @@ def is_text_file(file_path: str):
     tipo_mime, _ = mimetypes.guess_type(file_path)
     result = tipo_mime and (tipo_mime.startswith("text") or tipo_mime.startswith("application/javascript"))
 
-    if not result:
-        print(f'$$$ > tipo_mime = "{tipo_mime}"')
+    # if not result:
+    #     print(f'$$$ > tipo_mime = "{tipo_mime}"')
 
     return result
 
@@ -174,11 +173,11 @@ def handle_text_replacing(file_path: str, environment_name: str):
     app_config_cache = try_to_load_app_config_file()
     app_config = app_config_cache.AppConfigByEnviroment[environment_name]
 
-    for rel in app_config.TextReplacingList:
+    for rel in app_config['TextReplacingList']:
         text_file_content_replacing(
             file_path,
-            rel.OriginalText,
-            rel.ReplaceText,
+            rel['OriginalText'],
+            rel['ReplaceText'],
         )
 
 def handle_replacing_in_folder(folder_path: str, environment_name: str, ignored_extensions):
@@ -251,7 +250,7 @@ def handle_deploy_try():
     increment_app_version()
     app_config_cache = try_to_load_app_config_file()
     app_config = app_config_cache.AppConfigByEnviroment[environment_name]
-    website_name = app_config.HostingName
+    website_name = app_config['HostingName']
 
     apply_real_version_on_relative_env_file(environment_name, app_config_cache.AppVersion)
     build_angular_project(environment_name, website_name)
@@ -262,7 +261,7 @@ def handle_deploy_try():
 
     user_input = input(
             _yellow_text_tag +
-            'Want to update the S3 CDN (with "local-cdn" folder)?' +
+            'Want to update the S3 CDN (with ".local-fake-cdn" folder)?' +
             _reset_color_text_tag +
             ' [y/N] > '  +
             '')
@@ -270,7 +269,7 @@ def handle_deploy_try():
     has_to_update_cdn = (user_input.lower() == "y".lower())
 
     if (has_to_update_cdn):
-        cdn_name = app_config.CdnS3BucketName
+        cdn_name = app_config['CdnS3BucketName']
         terminal_command = (
             "aws s3 sync ./.local-fake-cdn s3://"
             + cdn_name
@@ -295,6 +294,10 @@ def handle_deploy_try():
         maxAgeInDays = maxAgeInHours / 24
 
         print("> Updating S3 chache control... ( max-age = " + str(maxAgeInSeconds) + "s / " +  str(maxAgeInHours) + "h / " + str(maxAgeInDays) + "d)")
+        subprocess.run(terminal_command, shell=True)
+
+        terminal_command = "aws s3 cp --content-type image/svg+xml --acl public-read s3://" + cdn_name + " s3://" + cdn_name + " --metadata-directive REPLACE --exclude \"*\" --include \"*.svg\" --recursive"
+        print("> Updating svg types in S3 CDN...")
         subprocess.run(terminal_command, shell=True)
 
     print(

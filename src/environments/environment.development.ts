@@ -7,8 +7,8 @@ export const DevelopmentEnvironmentName = 'dev';
 export const LocalEnvironmentName = 'local';
 
 export const environment: EnviromentData = {
-    API_URL: 'https://NAME-NAME-NAME.onrender.com',
-    CDN_URL: 'https://NAME-NAME-NAME.s3.sa-east-1.amazonaws.com',
+    API_URL: 'https://BASE-ANGULAR-PROJECT-01-dev.onrender.com',
+    CDN_URL: 'https://BASE-ANGULAR-PROJECT-01-dev.s3.sa-east-1.amazonaws.com',
     APP_VERSION: "M.M.P",
 
     ENVIRONMENT_NAME: DevelopmentEnvironmentName,

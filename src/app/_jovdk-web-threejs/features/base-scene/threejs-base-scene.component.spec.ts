@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BaseSceneComponent } from './base-scene.component';
+import { ThreeJsBaseSceneComponent } from './threejs-base-scene.component';
 
 describe('BaseSceneComponent', () => {
-    let component: BaseSceneComponent;
-    let fixture: ComponentFixture<BaseSceneComponent>;
+    let component: ThreeJsBaseSceneComponent;
+    let fixture: ComponentFixture<ThreeJsBaseSceneComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [BaseSceneComponent]
+            imports: [ThreeJsBaseSceneComponent]
         })
             .compileComponents();
 
-        fixture = TestBed.createComponent(BaseSceneComponent);
+        fixture = TestBed.createComponent(ThreeJsBaseSceneComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
