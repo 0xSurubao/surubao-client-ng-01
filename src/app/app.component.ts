@@ -11,7 +11,7 @@ import { ThreeJsBaseSceneComponent } from './_jovdk-web-threejs/features/base-sc
     standalone: true,
     imports: [
         NgIf,
-        RouterOutlet,
+        // RouterOutlet,
         FullAppComponent,
         ImgLoadingDirective,
     ],
@@ -39,7 +39,7 @@ export class AppComponent
                 {
                     this._isLoadingContent = false;
 
-                    this._fullApp._threeJsBaseScene.UpdateCameraFit();
+                    // this._fullApp._threeJsBaseScene.UpdateCameraFit();
                 }
             });
     }
