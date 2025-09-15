@@ -7,6 +7,7 @@ import { DragControls } from 'three/examples/jsm/controls/DragControls';
 import 'flowbite';
 
 // third
+import { NgxEchartsModule } from 'ngx-echarts';
 // ...
 
 // from project
@@ -34,6 +35,9 @@ import { LocalizationService } from '../_jovdk-web/features/localization-service
         // ThreeJsBaseSceneComponent,
         NavBarComponent,
         ImgLoadingDirective,
+        NgxEchartsModule.forRoot({
+            echarts: () => import('echarts'), // ESM dinâmico recomendado
+        }),
     ],
     templateUrl: './full-app.component.html',
     styleUrl: './full-app.component.css',
