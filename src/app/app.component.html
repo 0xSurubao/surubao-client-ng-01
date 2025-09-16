@@ -1,27 +1,5 @@
-<div class="fixed h-full w-full bg-pink-500 z-10" *ngIf="_isLoadingContent">
-    loading...
+<div *ngIf="isLoadingContent" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
+    <img [src]="spinnerUrl" alt="Loading" class="h-8 w-8 animate-spin" />
 </div>
 
-<div *ngIf="_isLoadingContent" class="
-    fixed z-10
-    flex
-    justify-center
-    items-center
-    h-full w-full
-    bg-black
-    ">
-    <img src="http://localhost:2828/public/_app/features/generic-ui/sprites/loading-icon-01.png" class="
-        relative
-        animate-spin
-        w-6 h-6
-        ">
-</div>
-
-<div class="
-    h-full w-full
-    bg-black
-    ">
-
-    <full-app #_fullApp></full-app>
-</div>
-
+<router-outlet></router-outlet>

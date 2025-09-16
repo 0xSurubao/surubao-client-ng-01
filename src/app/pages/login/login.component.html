@@ -1,0 +1,28 @@
+<div class="min-h-screen bg-black flex items-center justify-center px-4 py-12">
+    <div class="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8 shadow-xl shadow-black/40 backdrop-blur">
+        <h1 class="text-2xl font-semibold text-white">Connect Your Wallet</h1>
+        <p class="mt-2 text-sm text-slate-300">
+            Sign in with your Freighter wallet to access the Surubao dashboard. We will ask you to approve a SEP-10
+            challenge to verify ownership of your Stellar account.
+        </p>
+
+        <button (click)="connectWallet()"
+                class="mt-6 w-full rounded-lg bg-emerald-500 py-3 text-center text-base font-semibold text-black transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:bg-emerald-500/60"
+                [disabled]="isConnecting">
+            <span *ngIf="!isConnecting">Connect Freighter</span>
+            <span *ngIf="isConnecting" class="flex items-center justify-center gap-2">
+                <span class="h-3 w-3 animate-ping rounded-full bg-black"></span>
+                Connecting...
+            </span>
+        </button>
+
+        <div *ngIf="errorMessage" class="mt-4 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+            {{ errorMessage }}
+        </div>
+
+        <p class="mt-6 text-xs text-slate-400">
+            Don&apos;t have Freighter installed? <a href="https://www.freighter.app/" target="_blank" rel="noreferrer"
+                                                  class="text-emerald-300 hover:text-emerald-200">Download it here</a>.
+        </p>
+    </div>
+</div>

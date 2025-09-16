@@ -1,46 +1,26 @@
-import { Component, inject, ViewChild } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { FullAppComponent } from "./full-app/full-app.component";
-import { ImageService } from './full-app/ImageService';
+import { Component, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
-import { ImgLoadingDirective } from './_app/features/custom-directives/img-loading.directive';
-import { ThreeJsBaseSceneComponent } from './_jovdk-web-threejs/features/base-scene/threejs-base-scene.component';
+import { RouterOutlet } from '@angular/router';
+
+import { environment } from '../environments/environment';
+import { ImageService } from './full-app/ImageService';
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [
-        NgIf,
-        // RouterOutlet,
-        FullAppComponent,
-        ImgLoadingDirective,
-    ],
+    imports: [NgIf, RouterOutlet],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css'
 })
-export class AppComponent
-{
-    // dependencies
-    _imageService: ImageService = inject(ImageService);
+export class AppComponent {
+    private readonly imageService = inject(ImageService);
 
-    _isLoadingContent = true;
+    isLoadingContent = false;
+    readonly spinnerUrl = `${environment.app.cdnUrl}/public/_app/features/generic-ui/sprites/loading-icon-01.png`;
 
-    // parts
-    @ViewChild('_threeJsBaseScene') _fullApp!: FullAppComponent;
-
-    constructor()
-    {
-        this._imageService.imagesLoading$.subscribe(
-            (value) =>
-            {
-                // console.log('>>>>>> images.length = ' + value);
-
-                if (value == 0)
-                {
-                    this._isLoadingContent = false;
-
-                    // this._fullApp._threeJsBaseScene.UpdateCameraFit();
-                }
-            });
+    constructor() {
+        this.imageService.imagesLoading$.subscribe((value) => {
+            this.isLoadingContent = value > 0;
+        });
     }
 }
