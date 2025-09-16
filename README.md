@@ -107,9 +107,9 @@ _RUN-DEPLOY-PRODUCTION.bat
 
 | Environment | Network | API Base URL | Soroban RPC | Reflector Contract |
 |-------------|---------|--------------|-------------|--------------------|
-| local       | Testnet | http://localhost:2829 | https://soroban-testnet.stellar.org | CAVLP5DH2GJPZMVO7IJY4CVOD5MWEFTJFVPD2YY2FQXOQHRGHK4D6HLP |
-| development | Testnet | https://surubao-dev-01.onrender.com | https://soroban-testnet.stellar.org | CAVLP5DH2GJPZMVO7IJY4CVOD5MWEFTJFVPD2YY2FQXOQHRGHK4D6HLP |
-| prod-beta   | Testnet | https://surubao-prod-beta-01.onrender.com | https://soroban-testnet.stellar.org | CAVLP5DH2GJPZMVO7IJY4CVOD5MWEFTJFVPD2YY2FQXOQHRGHK4D6HLP |
+| local       | Testnet | http://localhost:2829 | https://soroban-testnet.stellar.org | CCSSOHTBL3LEWUCBBEB5NJFC2OKFRC74OWEIJIZLRJBGAAU4VMU5NV4W |
+| development | Testnet | https://surubao-dev-01.onrender.com | https://soroban-testnet.stellar.org | CCSSOHTBL3LEWUCBBEB5NJFC2OKFRC74OWEIJIZLRJBGAAU4VMU5NV4W |
+| prod-beta   | Testnet | https://surubao-prod-beta-01.onrender.com | https://soroban-testnet.stellar.org | CCSSOHTBL3LEWUCBBEB5NJFC2OKFRC74OWEIJIZLRJBGAAU4VMU5NV4W |
 | production  | Mainnet | https://surubao-prod-01.onrender.com | https://mainnet.sorobanrpc.com | CALI2BYU2JE6WVRUFYTS6MSBNEHGJ35P4AVCZYF3B6QOE3QKOB2PLE6M |
 
 Values map directly to the Angular environment bundle (src/environments/*). Contract IDs originate from Reflector orchestrator configuration; update them if new oracle clusters are deployed.
