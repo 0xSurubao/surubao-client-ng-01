@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
+import
+{
     Account,
     Asset,
     BASE_FEE,
@@ -16,7 +17,8 @@ import {
 import { OracleAssetConfig } from '../../../environments/environment.base';
 import { environment } from '../../../environments/environment';
 
-export interface OraclePricePoint {
+export interface OraclePricePoint
+{
     readonly price: number;
     readonly rawPrice: bigint;
     readonly timestamp: number;
@@ -24,7 +26,8 @@ export interface OraclePricePoint {
 }
 
 @Injectable({ providedIn: 'root' })
-export class OracleService {
+export class OracleService
+{
     private readonly networkPassphrase = environment.stellar.networkPassphrase;
     private readonly server = new rpc.Server(environment.stellar.sorobanRpcUrl, {
         allowHttp: environment.stellar.sorobanRpcUrl.startsWith('http://'),
@@ -34,16 +37,19 @@ export class OracleService {
     private readonly decimals = environment.oracle.reflector.decimals ?? 7;
     private readonly targetAsset = environment.oracle.reflector.targetAsset;
 
-    constructor() {
+    constructor()
+    {
         const resolvedContractId =
             environment.oracle.reflector.contractIdXlmUsdc ?? environment.oracle.reflector.contractIdXlmUsdt;
-        if (!resolvedContractId) {
+        if (!resolvedContractId)
+        {
             throw new Error('Reflector contract ID is not configured in the environment.');
         }
         this.contractId = resolvedContractId;
     }
 
-    async fetchLatestPrice(): Promise<OraclePricePoint> {
+    async fetchLatestPrice(): Promise<OraclePricePoint>
+    {
         const contract = new Contract(this.contractId);
         const account = new Account(Keypair.random().publicKey(), '0');
 
@@ -58,16 +64,19 @@ export class OracleService {
 
         const simulation = await this.server.simulateTransaction(transaction);
 
-        if ('error' in simulation && simulation.error) {
+        if ('error' in simulation && simulation.error)
+        {
             throw new Error(`Oracle simulation failed: ${simulation.error}`);
         }
 
-        if (!('result' in simulation) || !simulation.result?.retval) {
+        if (!('result' in simulation) || !simulation.result?.retval)
+        {
             throw new Error('Oracle returned an empty response.');
         }
 
         const native = scValToNative(simulation.result.retval) as { price: bigint; timestamp: bigint } | null;
-        if (!native || typeof native.price === 'undefined' || typeof native.timestamp === 'undefined') {
+        if (!native || typeof native.price === 'undefined' || typeof native.timestamp === 'undefined')
+        {
             throw new Error('Oracle returned unexpected data.');
         }
 
@@ -82,14 +91,18 @@ export class OracleService {
         };
     }
 
-    private buildAssetScVal(config: OracleAssetConfig): xdr.ScVal {
-        if (config.type === 'native') {
+    private buildAssetScVal(config: OracleAssetConfig): xdr.ScVal
+    {
+        if (config.type === 'native')
+        {
             const contractId = Asset.native().contractId(this.networkPassphrase);
             return this.buildStellarAssetScVal(contractId);
         }
 
-        if (config.type === 'stellar') {
-            if (!config.issuer) {
+        if (config.type === 'stellar')
+        {
+            if (!config.issuer)
+            {
                 throw new Error(`Missing issuer for asset ${config.code}`);
             }
             const contractId = new Asset(config.code, config.issuer).contractId(this.networkPassphrase);
@@ -102,7 +115,8 @@ export class OracleService {
         ]);
     }
 
-    private buildStellarAssetScVal(contractId: string): xdr.ScVal {
+    private buildStellarAssetScVal(contractId: string): xdr.ScVal
+    {
         return xdr.ScVal.scvVec([
             xdr.ScVal.scvSymbol('Stellar'),
             new Address(contractId).toScVal(),
