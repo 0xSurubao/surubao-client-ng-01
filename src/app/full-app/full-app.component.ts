@@ -240,8 +240,9 @@ export class FullAppComponent
             const xAxis = this.options.xAxis;
             if (Array.isArray(xAxis))
             {
-                if (xAxis[0]) xAxis[0].data = timestamps;
-                if (xAxis[1]) xAxis[1].data = timestamps;
+                // Cast to category axis when setting data to satisfy TS (only category axes have 'data')
+                if (xAxis[0]) (xAxis[0] as any).data = timestamps;
+                if (xAxis[1]) (xAxis[1] as any).data = timestamps;
             }
 
             // series is typed as SeriesOption | SeriesOption[] | undefined, so guard and work with array shape
