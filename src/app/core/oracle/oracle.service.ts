@@ -12,6 +12,7 @@ import
     scValToNative,
     xdr,
     Address,
+
 } from '@stellar/stellar-sdk';
 
 import { OracleAssetConfig } from '../../../environments/environment.base';
@@ -53,16 +54,43 @@ export class OracleService
         const contract = new Contract(this.contractId);
         const account = new Account(Keypair.random().publicKey(), '0');
 
+        const contractId = Asset.native().contractId(this.networkPassphrase);
+
+        let assetScVal = xdr.ScVal.scvVec([
+            xdr.ScVal.scvSymbol('Stellar'),
+            new Address(contractId).toScVal(),
+        ]);
+
         const transaction = new TransactionBuilder(account, {
             fee: BASE_FEE,
             networkPassphrase: this.networkPassphrase,
             timebounds: { minTime: 0, maxTime: 0 },
         })
-            .addOperation(contract.call(this.method, this.buildAssetScVal(this.targetAsset)))
-            .setTimeout(0)
+            // .addOperation(contract.call('assets', assetScVal))
+            // .addOperation(contract.call('assets'))
+            .addOperation(contract.call('lastprice', assetScVal))
+            .setTimeout(30)
             .build();
 
         const simulation = await this.server.simulateTransaction(transaction);
+
+        console.log('#### 01-01 | simulation = ', simulation);
+        console.log('#### 01-02 | transaction = ', transaction);
+
+
+        let test01: rpc.Api.SimulateTransactionSuccessResponse = simulation as rpc.Api.SimulateTransactionSuccessResponse;
+        // let test01: rpc.Api.SimulateTransactionSuccessResponse = simulation as rpc.Api.SimulateTransactionSuccessResponse;
+
+        if (test01.result)
+        {
+            console.log(">>>>> contractId = ", contractId);
+
+            let result = scValToNative(test01.result.retval);
+
+            // the result is a ScVal and so we can parse that to human readable output using the sdk's `scValToNative` function:
+            console.log("humanReadable Result:", result);
+            console.log("latestLedger:", test01.latestLedger);
+        }
 
         if ('error' in simulation && simulation.error)
         {
