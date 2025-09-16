@@ -27,6 +27,15 @@ This repo provides a minimal, opinionated setup with PWA and Material, plus util
 
 ---
 
+## Wallet Login & Oracle
+
+- **Freighter SEP-10** authentication gates the application. The login screen prompts the user to sign the backend challenge and stores the resulting JWT locally.
+- Once authenticated, the dashboard boots directly into the Reflector XLM/USDC feed. Data is fetched through Soroban RPC using the public contract IDs configured per environment (see table below).
+- A manual refresh control lets operators request a fresh price point on demand; the chart keeps a short in-memory timeseries for quick comparisons.
+- The sticky header surfaces the connected wallet and provides a one-click logout.
+
+---
+
 ## Stack
 
 - Angular 17 (TypeScript, Router, Service Worker/PWA)
@@ -94,6 +103,19 @@ _RUN-DEPLOY-PRODUCTION.bat
 
 ---
 
+### Environment Matrix
+
+| Environment | Network | API Base URL | Soroban RPC | Reflector Contract |
+|-------------|---------|--------------|-------------|--------------------|
+| local       | Testnet | http://localhost:2829 | https://soroban-testnet.stellar.org | CAVLP5DH2GJPZMVO7IJY4CVOD5MWEFTJFVPD2YY2FQXOQHRGHK4D6HLP |
+| development | Testnet | https://surubao-dev-01.onrender.com | https://soroban-testnet.stellar.org | CAVLP5DH2GJPZMVO7IJY4CVOD5MWEFTJFVPD2YY2FQXOQHRGHK4D6HLP |
+| prod-beta   | Testnet | https://surubao-prod-beta-01.onrender.com | https://soroban-testnet.stellar.org | CAVLP5DH2GJPZMVO7IJY4CVOD5MWEFTJFVPD2YY2FQXOQHRGHK4D6HLP |
+| production  | Mainnet | https://surubao-prod-01.onrender.com | https://mainnet.sorobanrpc.com | CALI2BYU2JE6WVRUFYTS6MSBNEHGJ35P4AVCZYF3B6QOE3QKOB2PLE6M |
+
+Values map directly to the Angular environment bundle (src/environments/*). Contract IDs originate from Reflector orchestrator configuration; update them if new oracle clusters are deployed.
+
+---
+
 ## TODO
 
 Context: although this repo aims to be a generic base, the latest iteration was bootstrapped from an older landing-page project. Some useful features were kept, and the landing-specific content was removed quickly. The checklist below tracks the cleanup and generalization work.
@@ -129,4 +151,9 @@ Context: although this repo aims to be a generic base, the latest iteration was 
   - 🧪 Add a “Showcase Scene” route for feature demos (img-loading, i18n)
   - 🧰 Optional: Storybook/Playwright scaffolding
   - 🧹 Add `npm run lint` and format hooks if desired
+
+
+
+
+
 
