@@ -57,8 +57,10 @@ export class OracleService
         const contractId = Asset.native().contractId(this.networkPassphrase);
 
         let assetScVal = xdr.ScVal.scvVec([
-            xdr.ScVal.scvSymbol('Stellar'),
-            new Address(contractId).toScVal(),
+            // xdr.ScVal.scvSymbol('Stellar'),
+            xdr.ScVal.scvSymbol('Other'),
+            // new Address(contractId).toScVal(),
+            xdr.ScVal.scvSymbol('XLM'),
         ]);
 
         const transaction = new TransactionBuilder(account, {
