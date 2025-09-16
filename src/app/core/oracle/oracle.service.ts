@@ -55,6 +55,9 @@ export class OracleService
         const account = new Account(Keypair.random().publicKey(), '0');
 
         const contractId = Asset.native().contractId(this.networkPassphrase);
+        // const contractId = 'CAVLP5DH2GJPZMVO7IJY4CVOD5MWEFTJFVPD2YY2FQXOQHRGHK4D6HLP'; // TESTnet | "Stellar Pubnet"
+        // const contractId = 'CCSSOHTBL3LEWUCBBEB5NJFC2OKFRC74OWEIJIZLRJBGAAU4VMU5NV4W'; // TESTnet | "Foreign Exchange Rates"
+        // const contractId = 'CCYOZJCOPG34LLQQ7N24YXBM7LL62R7ONMZ3G6WZAAYPB5OYKOMJRN63'; // TESTnet | "External CEX & DEX"
 
         let assetScVal = xdr.ScVal.scvVec([
             // xdr.ScVal.scvSymbol('Stellar'),
@@ -69,15 +72,15 @@ export class OracleService
             timebounds: { minTime: 0, maxTime: 0 },
         })
             // .addOperation(contract.call('assets', assetScVal))
-            // .addOperation(contract.call('assets'))
-            .addOperation(contract.call('lastprice', assetScVal))
+            .addOperation(contract.call('assets'))
+            // .addOperation(contract.call('lastprice', assetScVal))
             .setTimeout(30)
             .build();
 
         const simulation = await this.server.simulateTransaction(transaction);
 
-        console.log('#### 01-01 | simulation = ', simulation);
-        console.log('#### 01-02 | transaction = ', transaction);
+        // console.log('#### 01-01 | simulation = ', simulation);
+        // console.log('#### 01-02 | transaction = ', transaction);
 
 
         let test01: rpc.Api.SimulateTransactionSuccessResponse = simulation as rpc.Api.SimulateTransactionSuccessResponse;
@@ -85,7 +88,7 @@ export class OracleService
 
         if (test01.result)
         {
-            console.log(">>>>> contractId = ", contractId);
+            // console.log(">>>>> contractId = ", contractId);
 
             let result = scValToNative(test01.result.retval);
 
