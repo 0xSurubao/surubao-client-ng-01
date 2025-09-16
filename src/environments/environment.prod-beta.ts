@@ -1,73 +1,52 @@
-// third
-import { FirebaseOptions } from "@angular/fire/app";
+import { FirebaseOptions } from '@angular/fire/app';
 
+import { AppEnvironment, EnviromentData, createEnvironmentHandler } from './environment.base';
 
-export const ProductionEnvironmentName = 'prod';
-export const ProductionBetaEnvironmentName = 'prod-beta';
-export const DevelopmentEnvironmentName = 'dev';
-export const LocalEnvironmentName = 'local';
-
-export const environment: EnviromentData = {
-    API_URL: 'https://surubao-prod-beta-01.onrender.com',
-    CDN_URL: 'https://surubao-prod-beta-01.s3.sa-east-1.amazonaws.com',
-    APP_VERSION: "M.M.P",
-
-    ENVIRONMENT_NAME: ProductionBetaEnvironmentName,
-    VAPID_PUBLIC_KEY: "*****************************************",
+export const environment: AppEnvironment = {
+    production: false,
+    name: 'prod-beta',
+    apiBaseUrl: 'https://surubao-prod-beta-01.onrender.com',
+    stellar: {
+        networkPassphrase: 'Test SDF Network ; September 2015',
+        sorobanRpcUrl: 'https://soroban-testnet.stellar.org',
+    },
+    oracle: {
+        reflector: {
+            contractIdXlmUsdc: 'CAVLP5DH2GJPZMVO7IJY4CVOD5MWEFTJFVPD2YY2FQXOQHRGHK4D6HLP',
+            contractIdXlmUsdt: undefined,
+            method: 'lastprice',
+            decimals: 14,
+            targetAsset: {
+                type: 'native',
+                code: 'XLM',
+            },
+            baseAsset: {
+                type: 'stellar',
+                code: 'USDC',
+                issuer: 'GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN',
+            },
+        },
+    },
+    wallet: {
+        preferred: 'freighter',
+    },
+    app: {
+        version: 'M.M.P',
+        cdnUrl: 'https://surubao-prod-beta-01.s3.sa-east-1.amazonaws.com',
+        vapidPublicKey: '*****************************************',
+    },
 };
-
-export interface EnviromentData {
-    API_URL: string,
-    CDN_URL: string,
-    APP_VERSION: string,
-
-    ENVIRONMENT_NAME: string,
-
-    VAPID_PUBLIC_KEY: string,
-}
 
 export const firebaseEnvironment: FirebaseOptions = {
-    "projectId": "surubao-01",
-    "appId": "INSERT-APP-ID",
-    "storageBucket": "INSERT-STORAGE-BUCKET",
-    "apiKey": "INSERT-API-KEY",
-    "authDomain": "INSERT-AUTH-DOMAIN",
-    "messagingSenderId": "INSERT-MESSAGING-ID",
-    "measurementId": "INSERT-MEASUMENT-ID"
+    projectId: 'INSERT-PROJECT-ID',
+    appId: 'INSERT-APP-ID',
+    storageBucket: 'INSERT-STORAGE-BUCKET',
+    apiKey: 'INSERT-API-KEY',
+    authDomain: 'INSERT-AUTH-DOMAIN',
+    messagingSenderId: 'INSERT-MESSAGING-ID',
+    measurementId: 'INSERT-MEASUMENT-ID',
 };
 
-export class AppEnvironmentHandler {
-    static GetEnviromentCollectionPrefix = () => {
-        let value = '';
+export const AppEnvironmentHandler = createEnvironmentHandler(environment);
 
-        value += environment.ENVIRONMENT_NAME + '-';
-
-        return value;
-    }
-
-    static IsProd = () => {
-        let value = false;
-
-        value = environment.ENVIRONMENT_NAME == ProductionEnvironmentName
-
-        return value;
-    }
-
-    static IsLocal = () => {
-        let value = false;
-
-        value = environment.ENVIRONMENT_NAME == LocalEnvironmentName
-
-        return value;
-    }
-
-    static DoIfProduction = (callback: () => void) => {
-        if (AppEnvironmentHandler.IsProd())
-            callback();
-    }
-
-    static DoIfLocal = (callback: () => void) => {
-        if (AppEnvironmentHandler.IsLocal())
-            callback();
-    }
-}
+export type { AppEnvironment, EnviromentData };

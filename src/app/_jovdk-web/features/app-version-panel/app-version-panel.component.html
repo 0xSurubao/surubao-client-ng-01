@@ -11,11 +11,11 @@
     ">
 
     <span class="text-red-400 opacity-60 text-shadow" *ngIf="!_isProd">
-        {{ _environmentData.ENVIRONMENT_NAME }}
+        {{ _environmentData.name }}
     </span>
 
     <span class="text-white opacity-35 text-shadow">
-        v{{ _environmentData.APP_VERSION }}
+        v{{ _environmentData.app.version }}
     </span>
 
 </div>

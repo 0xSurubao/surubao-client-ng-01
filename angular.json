@@ -119,6 +119,9 @@
                         "development": {
                             "buildTarget": "base-angular-projects-01:build:development"
                         },
+                        "prod-beta": {
+                            "buildTarget": "base-angular-projects-01:build:prod-beta"
+                        },
                         "local": {
                             "buildTarget": "base-angular-projects-01:build:local"
                         }

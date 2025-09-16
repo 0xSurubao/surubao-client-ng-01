@@ -30,7 +30,7 @@ export class ThreeJsBaseSceneComponent
     // dependencies
     _clock: THREE.Clock = new THREE.Clock();
     _environmentData: EnviromentData = environment;
-    _cdnService: CdnService = new CdnService(this._environmentData.CDN_URL);
+    _cdnService: CdnService = new CdnService(this._environmentData.app.cdnUrl);
     _glbLoader: GLTFLoader = new GLTFLoader();
     _textureLoader = new THREE.TextureLoader();
 
@@ -747,7 +747,7 @@ export class ThreeJsBaseSceneComponent
 
     // LoadSfx = () =>
     // {
-    //     let musicThemeUrl = environment.CDN_URL + '/public/_app/features/home/coin-sfx-01.mp3';
+    //     let musicThemeUrl = environment.app.cdnUrl + '/public/_app/features/home/coin-sfx-01.mp3';
     //     const audioLoader = new THREE.AudioLoader();
     //     this._audioListener = new THREE.AudioListener();
 
