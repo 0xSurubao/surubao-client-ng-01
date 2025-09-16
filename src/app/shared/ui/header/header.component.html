@@ -1,0 +1,30 @@
+<header class="sticky top-0 z-40 border-b border-white/5 bg-slate-950/70 backdrop-blur">
+    <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4">
+        <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/20 text-sky-300">
+                <span class="text-lg font-semibold">S</span>
+            </div>
+            <div>
+                <p class="text-sm font-semibold text-white">Surubao dApp</p>
+                <p class="text-xs text-slate-400">{{ environmentName | titlecase }} environment</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4 text-sm text-slate-200">
+            <div class="hidden items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-slate-200 md:flex">
+                <span class="text-slate-500">Wallet</span>
+                <span class="tabular-nums text-slate-200" *ngIf="publicKey$ | async as publicKey; else noWallet">
+                    {{ truncateKey(publicKey) }}
+                </span>
+            </div>
+            <ng-template #noWallet>
+                <span class="text-slate-500">—</span>
+            </ng-template>
+
+            <button (click)="logout()"
+                    class="rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-200 transition hover:border-emerald-400/60 hover:text-emerald-300">
+                Logout
+            </button>
+        </div>
+    </div>
+</header>

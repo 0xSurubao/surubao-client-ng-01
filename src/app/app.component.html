@@ -2,4 +2,5 @@
     <img [src]="spinnerUrl" alt="Loading" class="h-8 w-8 animate-spin" />
 </div>
 
+<app-header *ngIf="isLoggedIn$ | async"></app-header>
 <router-outlet></router-outlet>

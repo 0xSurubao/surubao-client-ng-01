@@ -37,7 +37,20 @@
                         <h3 class="text-lg font-semibold text-white">XLM / USDC Oracle Feed</h3>
                         <p class="text-xs text-slate-400">Reflector contract {{ contractId }}</p>
                     </div>
+                    <button (click)="refreshPrice()"
+                            class="rounded-lg border border-sky-500/60 bg-sky-500/15 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-sky-200 transition hover:border-sky-400 hover:text-sky-100 disabled:cursor-not-allowed disabled:border-slate-700 disabled:text-slate-500"
+                            [disabled]="isLoading">
+                        <ng-container *ngIf="!isLoading; else refreshingState">
+                            Refresh
+                        </ng-container>
+                    </button>
                 </div>
+                <ng-template #refreshingState>
+                    <span class="flex items-center gap-2 text-sky-200">
+                        <span class="h-2 w-2 animate-ping rounded-full bg-sky-300"></span>
+                        Updating…
+                    </span>
+                </ng-template>
 
                 <div *ngIf="errorMessage" class="mt-4 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
                     {{ errorMessage }}
@@ -57,3 +70,4 @@
 
     <app-version-panel></app-version-panel>
 </div>
+
