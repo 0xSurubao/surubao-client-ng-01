@@ -207,6 +207,11 @@ export class FullAppComponent
         ],
     };
 
+    // source for x-axis labels
+    // timestamps: (string | number)[] = [];
+
+
+
     constructor()
     {
         this._imageService.imagesLoading$.subscribe(
@@ -219,4 +224,66 @@ export class FullAppComponent
             });
     }
 
+    ngOnInit()
+    {
+        // aqui você injeta dados reais
+        // this.options.xAxis[0].data = this.timestamps
+        // this.options.series[0].data = candleOHLC
+        // this.options.series[3].data = volumes
+        // this.options.series[0].data = candleOHLC
+        // this.options.series[3].data = volumes
+
+
+        if (this.options)
+        {
+            // xAxis is typed as XAXisOption | XAXisOption[] | undefined, so guard and work with array shape
+            const xAxis = this.options.xAxis;
+            if (Array.isArray(xAxis))
+            {
+                if (xAxis[0]) xAxis[0].data = timestamps;
+                if (xAxis[1]) xAxis[1].data = timestamps;
+            }
+
+            // series is typed as SeriesOption | SeriesOption[] | undefined, so guard and work with array shape
+            const series = this.options.series;
+            if (Array.isArray(series))
+            {
+                if (series[0]) series[0].data = candleData;  // candles
+                if (series[1]) series[1].data = ma5;         // MA5
+                if (series[2]) series[2].data = ma10;        // MA10
+                if (series[3]) series[3].data = volumeData;  // volume
+            }
+        }
+    }
+
 }
+
+
+// timestamps (categorias no eixo X)
+const timestamps = [
+    '2025-09-01', '2025-09-02', '2025-09-03',
+    '2025-09-04', '2025-09-05', '2025-09-06',
+    '2025-09-07', '2025-09-08', '2025-09-09',
+    '2025-09-10',
+];
+
+// candles OHLC [open, close, low, high]
+const candleData = [
+    [100, 105, 98, 108],
+    [105, 102, 100, 107],
+    [102, 110, 101, 112],
+    [110, 115, 109, 118],
+    [115, 112, 111, 116],
+    [112, 118, 110, 120],
+    [118, 125, 117, 127],
+    [125, 122, 120, 126],
+    [122, 130, 121, 132],
+    [130, 128, 127, 133],
+];
+
+// volumes
+const volumeData = [1500, 1200, 2000, 2500, 1800, 3000, 3500, 2200, 2800, 2600];
+
+// médias móveis (MA5 e MA10 de exemplo)
+const ma5 = [null, null, null, null, 107, 111, 116, 118, 122, 125];
+const ma10 = [null, null, null, null, null, null, null, null, null, 114];
